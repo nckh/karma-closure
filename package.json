@@ -1,8 +1,8 @@
 {
   "name": "karma-closure",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "A Karma plugin. Resolve Google Closure dependencies on the fly.",
-  "main": "lib/plugin.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "karma start test-app/karma.conf.js"
   },
@@ -17,20 +17,11 @@
   "author": "Vojta Jina <vojta.jina@gmail.com>",
   "dependencies": {},
   "devDependencies": {
-    "chai": "~1.5",
-    "google-closure-library": "^20170218.0.1",
-    "grunt": "~0.4.1",
-    "grunt-auto-release": "~0.0.3",
-    "grunt-bump": "~0.0.11",
-    "grunt-coffeelint": "~0.0.6",
-    "grunt-contrib-jshint": "~0.6.0",
-    "grunt-npm": "~0.0.2",
-    "grunt-simple-mocha": "~0.4.0",
+    "google-closure-library": "github:google/closure-library",
     "jasmine-core": "^2.8.0",
-    "karma": "~0.13",
+    "karma": "^2.0.2",
     "karma-chrome-launcher": "^2.2.0",
-    "karma-jasmine": "~0.3",
-    "mocha": "~1.8"
+    "karma-jasmine": "~0.3"
   },
   "peerDependencies": {
     "karma": ">=0.13"

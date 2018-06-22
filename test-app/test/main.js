@@ -2,6 +2,7 @@ goog.module('test');
 
 const main = goog.require('main');
 const destruct = goog.require('destruct');
+const {value} = goog.require('cloz.es6')
 
 /**
  * main
@@ -21,5 +22,9 @@ describe('main', function() {
 
   it('should concatenate constants', function() {
     expect(destruct).toEqual('gigou246');
+  });
+
+  it('should import from Closure-compatible ES6 modules', function() {
+    expect(value).toEqual('glaglou');
   });
 });

@@ -1,6 +1,7 @@
-# karma-closure [![Build Status](https://travis-ci.org/karma-runner/karma-closure.png?branch=master)](https://travis-ci.org/karma-runner/karma-closure)
+A Karma plugin that delegates module loading to [Google Closure](https://developers.google.com/closure/library/) Debug Loader. 
 
-> A Karma plugin that resolves [Google Closure](https://developers.google.com/closure/library/) dependencies on the fly.
+This fork is a complete rewrite from [the original karma-closure available on npm](https://www.npmjs.com/package/karma-closure), that 
+adds support for `goog.module`, `goog.module.declareNamespace` and ES6 modules.
 
 ## Installation
 
@@ -9,7 +10,7 @@ The easiest way is to keep `karma-closure` as a devDependency in your `package.j
 {
   "devDependencies": {
     "karma": "~0.10",
-    "karma-closure": "~0.1"
+    "karma-closure": "github:nckh/karma-closure#v0.2.0",
   }
 }
 ```
@@ -21,26 +22,27 @@ module.exports = function(config) {
   config.set({
     frameworks: ['jasmine', 'closure'],
     files: [
-      // closure base
+      // Closure base
       'lib/goog/base.js',
 
-      // included files - tests
-      'test/*.js',
-
-      // source files - these are only watched and served
+      // Source files
       {pattern: 'js/*.js', included: false},
 
-      // external deps
-      {pattern: 'lib/goog/deps.js', included: false, served: false}
+      // Test files
+      {pattern: 'test/*.js', included: false},
+
+      // Serve Closure's deps.js if using the Closure Library
+      {pattern: 'lib/goog/deps.js', included: false}
     ],
 
     preprocessors: {
-      // tests are preprocessed for dependencies (closure) and for iits
-      'test/*.js': ['closure', 'closure-iit'],
-      // source files are preprocessed for dependencies
-      'js/*.js': ['closure'],
-      // external deps
-      'lib/goog/deps.js': ['closure-deps']
+      // Source and test files are preprocessed for dependencies to generate 
+      // a custom deps.js
+      'js/**/*.js': ['closure'],
+
+      // Also pass the 'closure-bootstrap' preprocessor to wait until all
+      // dependencies are loaded to run the tests
+      'test/**/*.js': ['closure', 'closure-bootstrap'],
     }
   });
 };
@@ -49,10 +51,17 @@ module.exports = function(config) {
 For an example project, check out [./test-app/](/tree/master/test-app)
 
 
-## IIT preprocessor
-When using `iit` or `ddescribe`, Jasmine only executes these tests (resp. the patched version that comes with Karma). But still, all the tests (even those that are not actually executed) are shipped to the browser, parsed and the definition of the tests is executed. On a huge project, this can easily take seconds.
+## Migrate from karma-closure 0.1
 
-The `iit` preprocessor looks for test files that contain `iit` and only ships these tests (and their dependencies), which can significantly speed up running the tests during the development !
+karma-closure 0.2 is a complete rewrite that delegates source and test files loading to Closure's new Debug Loader with support for ES6 modules.
+
+If you were using karma-closure 0.1 on npm but want to migrate to this fork, follow these steps.
+
+1. Add `included: false` to all source and test files.
+2. Remove `served: false` from Closure's `goog/deps.js`.
+3. Remove `closure-iit` and `closure-deps` preprocessors.
+4. Add `closure` preprocessor to all source and test files.
+5. Add `closure-bootstrap` preprocessor to test files.
 
 
 ----
